@@ -1,39 +1,14 @@
 import React from "react";
-import axios from "axios";
+import {Table} from './components/Table/Table';
+import DonutChart from "./components/DonutChart";
+
 
 function App() {
-	const [accounts, setAccounts] = React.useState([]);
-
-	React.useEffect(() => {
-		axios
-			.get("/api/accounts/")
-			.then((response) => {
-				setAccounts(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
-
 	return (
-		<div>
-			<table>
-				<thead>
-					<tr>
-						<th>Balance</th>
-						<th>Status</th>
-					</tr>
-				</thead>
-				<tbody>
-					{accounts.map((account) => (
-						<tr>
-							<th>{account.balance}</th>
-							<th>{account.status}</th>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
+		<React.Fragment>
+            <DonutChart></DonutChart>
+			<Table ></Table>
+		</React.Fragment>
 	);
 }
 
