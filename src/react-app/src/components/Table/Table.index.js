@@ -1,15 +1,15 @@
 import React,{useMemo,useState,useRef,useEffect} from 'react';
 import {useTable,useGlobalFilter} from 'react-table';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
+import { AccountsTable,Button } from './Table.styled';
+import {Filter} from './Filter.index';
 import axios from "axios";
 import './Table.css';
-import {Filter} from './Filter'
 
 
-export const Table= ()=>{
-  
+
+export const Table= (props) =>{
   const [accounts, setAccounts] = useState([]);
- 
   const accountsRef = useRef();
   accountsRef.current = accounts;
  
@@ -59,11 +59,11 @@ function refreshTable(){
     
       return (
         (status ==='pending')?<div>
-          <button onClick={()=>changeStatus(rowIdx,'opened')}>To Opened </button>
-          <button onClick={()=>changeStatus(rowIdx,'closed')}> To Closed </button>
+          <Button onClick={()=>changeStatus(rowIdx,'opened')}>To Opened </Button>
+          <Button onClick={()=>changeStatus(rowIdx,'closed')}> To Closed </Button>
           </div>:(status==='opened')?
-          <div><button onClick={()=>changeStatus(rowIdx,'suspended')}>To Suspended </button>
-          <button onClick={()=>changeStatus(rowIdx,'closed')}>To Closed </button></div>:(status==="suspended")?<div><button onClick={()=>changeStatus(rowIdx,'closed')}>To closed </button></div>:<div></div>
+          <div><Button onClick={()=>changeStatus(rowIdx,'suspended')}>To Suspended </Button>
+          <Button onClick={()=>changeStatus(rowIdx,'closed')}>To Closed </Button></div>:(status==="suspended")?<div><Button onClick={()=>changeStatus(rowIdx,'closed')}>To closed </Button></div>:<div></div>
       );
     },
   },
@@ -95,7 +95,7 @@ const toastOptions={
     <React.Fragment>
       <Filter filter={globalFilter} setFilter={setGlobalFilter}/>
     
-       <table {...getTableProps()}>
+       <AccountsTable {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -118,7 +118,7 @@ const toastOptions={
           })}
         </tbody>
   
-      </table>
+      </AccountsTable>
     
       </React.Fragment>
   )

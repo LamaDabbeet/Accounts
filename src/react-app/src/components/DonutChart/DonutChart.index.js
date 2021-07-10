@@ -1,19 +1,29 @@
-import React from 'react'
-import { PieChart  } from 'react-minimal-pie-chart';
+import React,{useState} from 'react'
+import { PieChart } from 'react-minimal-pie-chart';
 
 
-export default function DonutChart() {
+export const DonutChart=(props)=> {
+	const [chartData, setData] = useState([]);
     const shiftSize = 7;
 	const defaultLabelStyle = {
 		fontSize: '5px',
 		fontFamily: 'sans-serif',
 		color: '#fff'
 	  };
+const {data}=props;
+function  getData(){
+	let segmentsArray=[];
+	for(let i=0;i< data.length;i++){
+       segmentsArray.push({
+		   title:data[i].status,
+	   })
+	}
+	
+}
     return (
         <PieChart
 			animate={true}
 			radius={PieChart.defaultProps.radius - shiftSize}
-		
 			label={({ dataEntry }) => dataEntry.title}
 			labelStyle={{
 			  ...defaultLabelStyle,

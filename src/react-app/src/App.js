@@ -1,15 +1,15 @@
 import React from "react";
-import {Table} from './components/Table/Table';
-import DonutChart from "./components/DonutChart";
+import {AccountsPage} from "./pages/AccountsPage";
+import { BrowserRouter as Router, Switch,Route } from "react-router-dom";
 
 
 function App() {
 	return (
-		<React.Fragment>
-            <DonutChart></DonutChart>
-			<Table ></Table>
-		</React.Fragment>
+	  <Router>
+		<Switch>
+		  <Route path="/" exact component={AccountsPage} />
+		</Switch>
+	  </Router>
 	);
 }
-
 export default App;
