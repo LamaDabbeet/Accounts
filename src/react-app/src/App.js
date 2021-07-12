@@ -9,6 +9,7 @@ function App() {
 		<Switch>
 		  <Route path="/" exact component={AccountsPage} />
 		</Switch>
+		
 	  </Router>
 	);
 }

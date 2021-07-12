@@ -1,25 +1,17 @@
-import React,{useState} from 'react'
+import React from 'react'
 import { PieChart } from 'react-minimal-pie-chart';
+import { colors } from '../../theme/colors';
 
 
 export const DonutChart=(props)=> {
-	const [chartData, setData] = useState([]);
-    const shiftSize = 7;
-	const defaultLabelStyle = {
-		fontSize: '5px',
-		fontFamily: 'sans-serif',
-		color: '#fff'
-	  };
-const {data}=props;
-function  getData(){
-	let segmentsArray=[];
-	for(let i=0;i< data.length;i++){
-       segmentsArray.push({
-		   title:data[i].status,
-	   })
-	}
-	
-}
+const {closedValue,approvedValue,pendingValue,fundedValue}=props
+const shiftSize = 7;
+const defaultLabelStyle = {
+	fontSize: '5px',
+	fontFamily: 'sans-serif',
+	color: '#fff'
+	};
+
     return (
         <PieChart
 			animate={true}
@@ -33,11 +25,11 @@ function  getData(){
             animationDuration={1000}
 			style={{width:'20%'}}
 			data={[
-				{ title: 'Opened', value: 10, color: '#E38627' },
-				{ title: 'Closed', value: 15, color: '#C13C37' },
-				{ title: 'Suspended', value: 20, color: '#6A2135' },
-				{ title: 'Pending', value: 30, color: '#008800' },
+			    { title: approvedValue>0?'Approved':'', value: approvedValue, color: colors.green },
+				{ title: closedValue>0?'Closed':'', value: closedValue, color: colors.red },
+				{ title: fundedValue>0?'Funded':'', value: fundedValue, color: colors.blue },
+				{ title: pendingValue >0? 'Pending':'', value: pendingValue, color: colors.yellow },
 			]}
-			/>
+		/>
     )
 }

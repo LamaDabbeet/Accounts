@@ -1,13 +1,17 @@
-import React,{useState} from 'react'
-import { DonutChart } from '../components/DonutChart/DonutChart.index';
+import React,{useState,useEffect} from 'react';
 import {Table} from '../components/Table/Table.index'
 import axios from "axios";
+import { Dashboard } from '../components/Dashboard/Dashboard.index';
+import {Wrapper} from './AccountsPage.styled';
 
 
 export const AccountsPage = () =>{
 const [accounts, setAccounts] = useState([]);
 
-function getAccounts(){
+useEffect(() => {
+    getAccounts()
+}, [])
+const getAccounts=()=>{    
     axios
         .get("/api/accounts/")
         .then((response) => {
@@ -16,11 +20,14 @@ function getAccounts(){
         .catch((error) => {
             console.error(error);
         });
-    }
-    return (
+}
+
+    return accounts.length>0?(
         <React.Fragment>
-            <DonutChart data={accounts}></DonutChart>
-            <Table data={accounts}></Table>
+            <Wrapper>
+                <Dashboard  data={accounts}> </Dashboard>
+                <Table getAccounts={getAccounts} data={accounts}></Table>
+            </Wrapper>
         </React.Fragment>
-    )
+    ):(<div style={{display:'flex',justifyContent:'center',alignItems:'center'}}><p>... still Loading</p></div>)
 }

@@ -25,10 +25,29 @@ app.get("/api/accounts", (req, res) => {
 		}
 	});
 });
-
+app.patch('/api/accounts/:id', async (req, res) => {
+	models.Account.findById(req.params.id, function (err, account) {
+	  if (err)
+	  res.send(err);
+	  account.status = req.body.status ? req.body.status : account.status;
+	  
+	  account.save(function (err) {
+		if (err)
+		  err.json(err);
+		res.json({
+		  message: 'Account status updated',
+		  data: account
+		});
+	  });
+	});
+  });
 connectDb().then(async () => {
-
+try{
 	app.listen(process.env.PORT, () =>
-		console.log(`App ready and listening on port ${process.env.PORT}!`)
-	);
+	console.log(`App ready and listening on port ${process.env.PORT}!`)
+);
+}
+catch(err){
+	console.log(err)
+  }	
 });

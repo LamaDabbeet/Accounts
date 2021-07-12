@@ -1,10 +1,9 @@
 import React,{useMemo,useState,useRef,useEffect} from 'react';
 import {useTable,useGlobalFilter} from 'react-table';
-import {  toast } from 'react-toastify';
-import { AccountsTable,Button } from './Table.styled';
-import {Filter} from './Filter.index';
+import {Filter} from './Filter/Filter.index';
 import axios from "axios";
-import './Table.css';
+import {Button} from "../shared/Button/Button.index"
+import { colors } from '../../theme/colors';
 
 
 
@@ -14,29 +13,15 @@ export const Table= (props) =>{
   accountsRef.current = accounts;
  
   useEffect(() => {
-   getAccounts();
-  }, []);  
-  
-function getAccounts(){
-  axios
-      .get("/api/accounts/")
-      .then((response) => {
-        setAccounts(response.data.data);
-        toast("Wow so easy!",toastOptions)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-}
-function refreshTable(){
-  getAccounts();
-}
+   setAccounts(props.data);
+  },[props]);  
+
+
  function changeStatus(rowIndex,newStatus){
    axios
       .patch(`/api/accounts/${accountsRef.current[rowIndex]._id}`,{status: newStatus})
       .then((response) => {
-        refreshTable();
-        toast('Wow so easy!');
+        props.getAccounts();
       })
       .catch((error) => {
         console.error(error);
@@ -55,15 +40,20 @@ function refreshTable(){
     accessor: '[row identifier to be passed to button]',
       Cell: (props) => {
       const rowIdx = props.row.id;
-      const status = accountsRef.current[rowIdx].status
+      const status = accountsRef.current[rowIdx].status;
+      const balance = accountsRef.current[rowIdx].balance;
     
       return (
         (status ==='pending')?<div>
-          <Button onClick={()=>changeStatus(rowIdx,'opened')}>To Opened </Button>
-          <Button onClick={()=>changeStatus(rowIdx,'closed')}> To Closed </Button>
-          </div>:(status==='opened')?
-          <div><Button onClick={()=>changeStatus(rowIdx,'suspended')}>To Suspended </Button>
-          <Button onClick={()=>changeStatus(rowIdx,'closed')}>To Closed </Button></div>:(status==="suspended")?<div><Button onClick={()=>changeStatus(rowIdx,'closed')}>To closed </Button></div>:<div></div>
+          <Button variant="success" onClick={()=>changeStatus(rowIdx,'approved')}>To Approved </Button>
+          <Button variant="danger" onClick={()=>changeStatus(rowIdx,'closed')}> To Closed </Button>
+          </div>:
+          (status==='approved')?
+          <div><Button variant="primary" onClick={()=>changeStatus(rowIdx,'funded')}>To Funded </Button>
+          <Button variant="danger" onClick={()=>changeStatus(rowIdx,'closed')}>To Closed </Button></div>
+          :(status==="funded" && balance ===0)?
+          <div><Button variant={'danger'} onClick={()=>changeStatus(rowIdx,'closed')}>To closed </Button>
+          </div>:<div></div>
       );
     },
   },
@@ -84,41 +74,34 @@ const columns = useMemo(() => COLUMNS, [])
   },useGlobalFilter)
 
   const {globalFilter}=state;
-const toastOptions={
-  position:"top-right",
-  autoClose:5000,
-  hideProgressBar:false,
-  newestOnTop:false,
-
-}
   return (
     <React.Fragment>
       <Filter filter={globalFilter} setFilter={setGlobalFilter}/>
     
-       <AccountsTable {...getTableProps()}>
+       <table style={{width:'100%',borderCollapse:'collapse',marginTop:'2rem'}} {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr style={{backgroundColor:colors.white,borderBottom:`1px solid ${colors.lightSilver}`}} {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th style={{padding:'8px'}} {...column.getHeaderProps()}>{column.render('Header')}</th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody style={{textAlign:'center', textTransform:'uppercase'}} {...getTableBodyProps()}>
           {rows.map(row => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
+              <tr  style={{backgroundColor:colors.white,borderBottom:`1px solid ${colors.lightSilver}`}} {...row.getRowProps()}>
                 {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  return <td style={{padding:'8px'}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                 })}
               </tr>
             )
           })}
         </tbody>
   
-      </AccountsTable>
+      </table>
     
       </React.Fragment>
   )

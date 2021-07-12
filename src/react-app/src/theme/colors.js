@@ -1,13 +1,14 @@
 export const colors = {
-    blue: '#007bff',
+    blue: '#4fa8f9',
     white: '#fff',
-    red: '#FF0000',
-    limeGreen: '#25ab4b',
-    cornflowerBlue: '#32a3dc',
-    mineShaft: '#333333',
+    red: '#ed8e79',
+    green: '#85cca2',
+    yellow: '#f6cc85',
     black: '#000000',
-    whiteSmoke: '#f1f1f1',
-    summerSky: '#26B0D5',
-    lemonChiffon: '#FCF8D0',
+    whiteSmoke: '#f4f4f4',
+    summerSky: '#34deff',
+    lightGray:'#9ca2a7',
+    silver:'#cbcfd3',
+    lightSilver:"#e3e7ea"
   };
   

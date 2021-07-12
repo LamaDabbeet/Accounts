@@ -11,7 +11,11 @@ const accountSchema = new mongoose.Schema(
 			required: true,
 		},
 	},
-	{ timestamps: true }
+	{ timestamps: true,
+		capped: { size: 1024 },
+		bufferCommands: false,
+		autoCreate: false 
+	 }
 );
 
 const Account = mongoose.model("Account", accountSchema);
